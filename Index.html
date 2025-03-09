@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+        <title>AMOR DE MI VIDA</title>
+        <style>
+/* Aseguramos que el body ocupe toda la altura y permita scroll */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh; /* Esto asegura que el cuerpo de la página ocupe toda la altura visible */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url(backgroud.png);
+    overflow: auto; /* Permite que la página sea desplazable */
+    flex-direction: column;
+    font-family: 'Cursive', sans-serif;
+}
+
+        /* Estilo para el botón de música */
+        #playButton {
+            background-color: #1c0205;
+            border: none;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 20px;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        #playButton img {
+            width: 50px;  /* Tamaño de la imagen dentro del botón */
+            height: 50px;
+        }
+
+        .container {
+            position: relative;
+            width: 80%;
+            height: 80%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Estilo para las imágenes */
+        .image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Línea horizontal que conecta las imágenes */
+        .line {
+            position: absolute;
+            width: 0%;
+            height: 4px;
+            background-color: red;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: drawLine 2s forwards;
+        }
+
+        /* Animación para dibujar la línea horizontal */
+        @keyframes drawLine {
+            0% {
+                width: 0%;
+            }
+            100% {
+                width: 90%;
+            }
+        }
+
+        /* Estilo para el texto "Te amo" */
+        .center-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Cursive', sans-serif;
+            font-size: 24px;
+            color: red;
+            z-index: 1;
+            padding: 10px;
+            background-color: white;
+            border: 2px solid red;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* Estilo para las frases que aparecerán después del clic */
+        .phrase {
+            position: absolute;
+            font-family: 'Cursive', sans-serif;
+            font-size: 18px;
+            color: black;
+            opacity: 0;
+            animation: showPhrase 3s forwards;
+            z-index: 2;
+            white-space: nowrap; /* Para evitar que las frases se corten en varias líneas */
+            padding: 5px;
+            transition: transform 1s ease;
+        }
+
+        /* Animación de aparición de las frases */
+        @keyframes showPhrase {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Estilos específicos para pantallas móviles */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;  /* Asegura que no quede pegado a los bordes */
+            }
+
+            .container {
+                width: 100%;
+                height: 100%;
+            }
+
+            .image {
+                width: 80px;
+                height: 80px;
+            }
+
+            .center-text {
+                font-size: 18px;
+                padding: 8px;
+            }
+
+            .phrase {
+                font-size: 14px; /* Reducir tamaño de las frases */
+                max-width: 90%; /* Asegurarse de que las frases no se salgan de la pantalla */
+                word-wrap: break-word; /* Permite que las frases se ajusten */
+            }
+        }
+
+        /* Asegurarse de que las frases no se encimen */
+        @media (max-width: 480px) {
+            .phrase {
+                font-size: 12px;  /* Aún más pequeño en pantallas pequeñas */
+                max-width: 100%;
+                white-space: normal; /* Asegura que las frases puedan saltar a la siguiente línea si es necesario */
+            }
+        }
+
+/* Estilo para el contenedor del texto largo */
+.long-text-container {
+    text-align: center;
+    font-family: 'Cursive', sans-serif;
+    font-size: 18px;
+    color: black;
+    opacity: 0;
+    visibility: hidden;
+    padding: 20px;
+    max-width: 80%;
+    white-space: pre-line; /* Para que el texto respete saltos de línea */
+    word-wrap: break-word; /* Permite que el texto se ajuste dentro de los límites */
+    margin-top: 20px; /* Margen superior */
+    margin-bottom: 30px; /* Margen inferior */
+}
+
+/* Animación de aparición de texto largo */
+@keyframes showLongText {
+    0% {
+        opacity: 0;
+        visibility: hidden;
+    }
+    100% {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+/* Estilo para el título */
+.long-text-title {
+    font-size: 36px; /* Título grande */
+    font-weight: bold;
+    color: red; /* Puedes cambiar el color a lo que prefieras */
+    margin-bottom: 20px; /* Espacio debajo del título */
+}
+
+/* Estilos específicos para pantallas móviles */
+@media (max-width: 768px) {
+    .long-text-container {
+        font-size: 16px; /* Tamaño más pequeño para móviles */
+        padding: 10px; /* Menos relleno */
+        max-width: 90%; /* Asegurar que el contenedor no se salga de la pantalla */
+    }
+
+    /* Asegurarse de que las líneas no se superpongan */
+    .long-text-line {
+        font-size: 14px; /* Tamaño de fuente más pequeño */
+        padding: 5px; /* Un poco de espacio entre las líneas */
+    }
+
+    .long-text-title {
+        font-size: 28px; /* Reducir tamaño del título en pantallas móviles */
+    }
+}
+
+/* Asegurarse de que en pantallas más pequeñas no haya problemas de solapamiento */
+@media (max-width: 480px) {
+    .long-text-container {
+        font-size: 14px; /* Aún más pequeño para pantallas muy pequeñas */
+        padding: 5px; /* Menos relleno */
+    }
+
+    .long-text-line {
+        font-size: 12px; /* Tamaño de fuente aún más pequeño */
+    }
+
+    .long-text-title {
+        font-size: 24px; /* Título aún más pequeño en pantallas pequeñas */
+    }
+}
+
+
+
+
+ /* Animación de aparición y desaparición */
+ @keyframes fadeInOut {
+        0% {
+            opacity: 0;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+        </style>
+    </head>
+    <body>
+        <!-- Botón para reproducir música con imagen -->
+        <button id="playButton">
+            <img src="nota-musical.png" alt="Música">
+        </button>
+        <!-- Reproductor de audio -->
+        <audio id="audioPlayer" loop>
+            <source src="Siddhartha - Paraíso Lunar.mp3" type="audio/mpeg">
+            Tu navegador no soporta la etiqueta de audio.
+        </audio>
+        <div id="longText" class="long-text-container" style="font-family: 'Roboto';font-size: 22px;">
+            <div class="long-text-title" style="font-family: 'Montserrat';font-size: 18px; color: #1c0205;">PARA ARTEMISA EL AMOR DE MI VIDA</div>
+            <!-- El texto largo se insertará aquí -->
+        </div>
+
+        
+        <div class="container">
+            <!-- Imágenes a los lados -->
+            <div class="image-container left" style="position: absolute; left: 10%;">
+                <img src="Artemisa.jpg" alt="Imagen 1" class="image">
+            </div>
+            <div class="image-container right" style="position: absolute; right: 10%;">
+                <img src="ELI.jpg" alt="Imagen 2" class="image">
+            </div>
+
+            <button class="center-text" id="teAmoBtn" style="font-family: 'Roboto';font-size: 22px;">
+                Te amo
+            </button>
+        </div>
+        <script>
+        // Obtener el botón y el reproductor de audio
+        const playButton = document.getElementById("playButton");
+        const audioPlayer = document.getElementById("audioPlayer");
+
+        // Al hacer clic en el botón, reproducir música y ocultar el botón
+        playButton.addEventListener("click", function() {
+            // Reproducir la canción
+            audioPlayer.play().then(() => {
+                console.log("¡La canción está reproduciéndose!");
+            }).catch((error) => {
+                console.error("Error al intentar reproducir la canción: ", error);
+            });
+
+            // Ocultar el botón después de hacer clic
+            playButton.style.display = "none";
+        });
+        </script>
+        <script>
+    // Frases de amor para mostrar después del clic
+    const frases = [
+        "Te amo",
+        "Eres el amor de mi vida",
+        "Eres la futura madre de mis hijos",
+        "Eres lo mejor que me pudo pasar",
+        "Eres una mujer maravillosa",
+        "Siempre pienso en ti",
+        "Solo contigo quiero todo",
+        "Quiero estar siempre a tu lado",
+        "Solo tú mereces todo de mí",
+        "Soy todo tuyo",
+        "Eres toda mía",
+        "Nos amaremos por siempre"
+    ];
+
+    // Función para generar posiciones aleatorias
+    function getRandomPosition() {
+        const top = Math.floor(Math.random() * 80) + 10; // Rango 10% - 90% para top
+        const left = Math.floor(Math.random() * 80) + 10; // Rango 10% - 90% para left
+        return { top: `${top}%`, left: `${left}%` };
+    }
+
+    // Función para verificar si una nueva frase se superpone con alguna ya existente
+    function checkOverlap(newPosition, existingPositions) {
+        const overlapThreshold = 10; // Umbral de tolerancia para solapamiento
+
+        for (let pos of existingPositions) {
+            const distance = Math.sqrt(Math.pow(newPosition.top - pos.top, 2) + Math.pow(newPosition.left - pos.left, 2));
+            if (distance < overlapThreshold) {
+                return true; // Si se solapan, devolvemos true
+            }
+        }
+        return false; // Si no se solapan, devolvemos false
+    }
+
+    document.getElementById("teAmoBtn").addEventListener("click", function() {
+    // Ocultar imágenes, línea y el botón
+    document.querySelectorAll(".image-container, .line, .center-text").forEach(function(element) {
+        element.style.display = "none";
+    });
+
+    // Crear un contenedor para las frases
+    const phrasesContainer = document.createElement("div");
+    phrasesContainer.classList.add("phrases-container");
+
+    // Almacenar posiciones para evitar solapamientos
+    const existingPositions = [];
+
+    // Añadir las frases al contenedor
+    frases.forEach(function(frase) {
+        const phraseElement = document.createElement("div");
+        phraseElement.classList.add("phrase");
+        phraseElement.textContent = frase;
+
+        let position = getRandomPosition();
+
+        // Verificar si la nueva posición se solapa con alguna existente, si es así, generar una nueva posición
+        while (checkOverlap(position, existingPositions)) {
+            position = getRandomPosition();
+        }
+
+        // Aplicar la posición final de la frase
+        phraseElement.style.top = position.top;
+        phraseElement.style.left = position.left;
+
+        // Almacenar la posición para futuras comprobaciones
+        existingPositions.push(position);
+
+        // Añadir la animación
+        phraseElement.style.animation = "showPhrase 3s forwards";
+
+        phrasesContainer.appendChild(phraseElement);
+    });
+
+    // Añadir el contenedor de frases al body
+    document.body.appendChild(phrasesContainer);
+
+    setTimeout(function() {
+        phrasesContainer.style.display = "none"; // Ocultar las frases
+
+        // Mostrar el contenedor del texto largo
+        const longTextContainer = document.getElementById("longText");
+        longTextContainer.style.visibility = "visible";
+        longTextContainer.style.animation = "showLongText 2s forwards";
+
+        // Dividir el texto largo en líneas
+        const longText = `
+            Aun recuerdo cuando recién hablamos, que me dijiste que eras de sonora igual que yo, cuando me dijiste eso me sorprendió, porque casi siempre me encontraba con gente lejos de donde yo.
+            Tambien recuerdo que comenzamos a encontrarnos en juegos, en zana sobre todo, yo antes no era tan fan de los zanas, pero me enseñaste a verlo diferente, a divertirme y me ha gustado bastante, también recuerdo cuando hice de tu escudo para que no te sucediera nada, cuando me dijiste que ahora me llamarías a cada rato para que jugáramos juntos, lo cual me puso algo triste porque de un momento a otro ya casi no me hablabas, también recuerdo la primera vez que escuche tu voz, una voz tan dulce, tan linda, también la primera vez que escuche tu respiración, cuando nos quedamos profundamente dormidos, la primera vez que hubo mal entendidos, pero fueron solucionados y seguimos avanzando juntos, me cautivo tu risa, tu forma de hablar, tu forma de bromear, cuando te enojas, cuando estas muy feliz y comienzas a reír sin poder parar. Recuerdo cuando dijimos te quiero, se sintió tan bonito y la primera vez que me dijiste te amo fue maravilloso, y  cada día que pasamos juntos están maravilloso amor, no puedo dejar de pensarte, me enamoro cada vez mas intensamente de ti, sueño con esa vida junto a ti, formando nuestra familia, apoyándonos, me veo cuidándote a ti y a nuestros hijos, estando siempre para ustedes, y es que yo ya no pienso alejarme nunca de aquí, eres mi lugar seguro, mi paz, porque si tu estas triste yo lo estoy, si estar feliz yo lo estoy, tus problemas, tus victorias, tus metas, tus enemigos son míos también, porque de eso se trata estar el uno para el otro en todo momento, te amo y digo te amo porque no hay algo mas fuerte que eso mi vida. ARTEMISA LO ERES ABSOLUTAMENTE TODO PARA MI, TE AMO CON MI VIDA.
+        `;
+        
+        const lines = longText.split('\n');
+        lines.forEach(function(line, index) {
+            const lineElement = document.createElement("div");
+            lineElement.classList.add("long-text-line");
+            lineElement.textContent = line;
+            longTextContainer.appendChild(lineElement);
+
+            // Animar cada línea con retraso
+            setTimeout(function() {
+                lineElement.style.animationDelay = `${index * 0.5}s`; // Añadir retraso por línea
+            }, 100);
+        });
+
+        // Crear imagen debajo del texto largo
+        const imageElement = document.createElement("img");
+        imageElement.src = "A&E.png"; // Cambiar URL por la imagen deseada
+        imageElement.alt = "Imagen amor";
+        imageElement.style.display = "block";
+        imageElement.style.margin = "20px auto"; // Centrar la imagen
+        imageElement.style.width = "150px"; // Puedes ajustar el tamaño de la imagen
+
+        // Añadir la imagen al body debajo del texto largo
+        document.body.appendChild(imageElement);
+
+        // Crear el texto "Feliz primer mes juntos Mi amor"
+        const textElement = document.createElement("div");
+        textElement.classList.add("long-text-line");
+        textElement.textContent = "Feliz primer mes juntos Mi amor";
+        textElement.style.textAlign = "center"; // Centrar el texto
+        textElement.style.fontSize = "20px"; // Ajustar tamaño de la fuente
+        textElement.style.fontWeight = "bold"; // Negrita para el texto
+        textElement.style.fontFamily = "Montserrat";
+
+        // Añadir el texto debajo de la imagen
+        document.body.appendChild(textElement);
+
+        // Crear imágenes laterales que aparecerán y desaparecerán
+        const leftImage = document.createElement("img");
+        leftImage.src = "coraz.png"; // Cambiar por la imagen deseada
+        leftImage.alt = "Imagen lateral izquierda";
+        leftImage.style.position = "absolute";
+        leftImage.style.left = "10%"; // Ubicación a la izquierda
+        leftImage.style.top = `${imageElement.offsetTop + 20}px`; // Alinearlas debajo de la imagen central
+        leftImage.style.width = "100px";
+        leftImage.style.animation = "fadeInOut 2s infinite"; // Animación de aparición/desaparición
+
+        const rightImage = document.createElement("img");
+        rightImage.src = "coraz.png"; // Cambiar por la imagen deseada
+        rightImage.alt = "Imagen lateral derecha";
+        rightImage.style.position = "absolute";
+        rightImage.style.right = "10%"; // Ubicación a la derecha
+        rightImage.style.top = `${imageElement.offsetTop + 20}px`; // Alinearlas debajo de la imagen central
+        rightImage.style.width = "100px";
+        rightImage.style.animation = "fadeInOut 2s infinite"; // Animación de aparición/desaparición
+
+        // Añadir las imágenes laterales al body
+        document.body.appendChild(leftImage);
+        document.body.appendChild(rightImage);
+    }, 10000); // Después de 10 segundos
+});
+        </script>
+    </body>
+</html>
